@@ -13,6 +13,7 @@ Technology Stack:
 - Open API documentation (Swagger)
 - JUnit 5
 - Database (Postgres SQL)
+- Internationalization i18n
 
 Database Structure:
 ![](src/main/resources/db.png)
