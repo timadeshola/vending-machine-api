@@ -20,3 +20,6 @@ Database Structure:
 
 UML Diagram
 ![](src/main/resources/uml.png)
+
+Swagger UI URL
+-   http://localhost:9090/swagger-ui/index.html
