@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.timadeshola.vendingmachine.persistence.entity</OriginalElement>
+  <nodes>
+    <node x="134.0" y="80.0">com.timadeshola.vendingmachine.persistence.entity.User</node>
+    <node x="243.0" y="80.0">com.timadeshola.vendingmachine.persistence.entity.CustomClientDetails</node>
+    <node x="0.0" y="80.0">com.timadeshola.vendingmachine.persistence.entity.Product</node>
+    <node x="0.0" y="155.0">com.timadeshola.vendingmachine.persistence.entity.ProductTest</node>
+    <node x="191.0" y="155.0">com.timadeshola.vendingmachine.persistence.entity.UserTest</node>
+    <node x="110.5" y="0.0">com.timadeshola.vendingmachine.persistence.entity.BaseEntity</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.timadeshola.vendingmachine.persistence.entity.User" target="com.timadeshola.vendingmachine.persistence.entity.BaseEntity" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="com.timadeshola.vendingmachine.persistence.entity.Product" target="com.timadeshola.vendingmachine.persistence.entity.BaseEntity" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="57.0" y="55.0" />
+      <point x="178.5" y="55.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="com.timadeshola.vendingmachine.persistence.entity.CustomClientDetails" target="com.timadeshola.vendingmachine.persistence.entity.BaseEntity" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.0" />
+      <point x="349.0" y="55.0" />
+      <point x="178.5" y="55.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="227.5" y="92.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
