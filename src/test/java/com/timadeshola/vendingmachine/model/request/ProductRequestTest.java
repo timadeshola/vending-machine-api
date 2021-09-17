@@ -30,13 +30,10 @@ class ProductRequestTest {
     void testProductRequestObject() {
         product = ProductRequest.builder()
                 .name("Java Expert")
-                .amountAvailable(BigDecimal.valueOf(20))
                 .cost(BigDecimal.valueOf(20))
-                .seller(1L)
                 .build();
 
         assertNotNull(product);
-        assertThat(product.getAmountAvailable()).isEqualTo(BigDecimal.valueOf(20));
         assertThat(product).isExactlyInstanceOf(ProductRequest.class);
     }
 }

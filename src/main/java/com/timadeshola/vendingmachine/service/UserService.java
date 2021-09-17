@@ -29,7 +29,7 @@ public interface UserService {
                                                     String startDate,
                                                     String endDate,
                                                     String username,
-                                                    RoleType role);
+                                                    String role);
 
     public BigDecimal deposit(BigDecimal amount);
 

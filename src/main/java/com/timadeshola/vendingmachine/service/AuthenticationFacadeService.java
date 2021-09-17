@@ -1,10 +1,8 @@
 package com.timadeshola.vendingmachine.service;
 
-import lombok.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
  * Date: 9/16/21
  * Time: 11:28 PM
  */
-public interface AuthenticationFacadeService  {
+public interface AuthenticationFacadeService {
 
     public Authentication getAuthentication();
 

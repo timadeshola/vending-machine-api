@@ -36,7 +36,7 @@ class UserTest {
                 .username("timadeshola")
                 .password("password@123")
                 .deposit(BigDecimal.valueOf(10))
-                .role(RoleType.BUYER)
+                .role(RoleType.BUYER.getRole())
                 .createdBy("sam.wise")
                 .dateCreated(new Timestamp(System.currentTimeMillis()))
                 .updatedBy("timadeshola")

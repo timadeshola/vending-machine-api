@@ -11,8 +11,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +54,6 @@ class UserServiceTest {
         request = UserRequest.builder()
                 .username("timadeshola")
                 .password("password@123")
-                .deposit(BigDecimal.valueOf(10))
                 .role(RoleType.BUYER)
                 .build();
 
@@ -57,7 +62,6 @@ class UserServiceTest {
         assertNotNull(request);
         assertNotNull(user);
         assertThat(user.getUsername()).isEqualTo("timadeshola");
-        assertThat(user.getPassword()).isNotEmpty();
         assertEquals(1L, user.getId());
         assertThat(user).isExactlyInstanceOf(UserResponse.class);
     }
@@ -70,7 +74,6 @@ class UserServiceTest {
         request = UserRequest.builder()
                 .username("timadeshola")
                 .password("password@123")
-                .deposit(BigDecimal.valueOf(15))
                 .build();
 
         user = userService.updateUser(request, existingUser.getId());
@@ -78,7 +81,6 @@ class UserServiceTest {
         assertNotNull(request);
         assertNotNull(user);
         assertThat(user.getUsername()).isEqualTo("timadeshola");
-        assertThat(user.getPassword()).isNotEmpty();
         assertEquals(BigDecimal.valueOf(15.00), user.getDeposit());
         assertEquals(BigDecimal.valueOf(10.00), existingUser.getDeposit());
         assertThat(user).isExactlyInstanceOf(UserResponse.class);
@@ -120,15 +122,42 @@ class UserServiceTest {
         assertThat(users).isExactlyInstanceOf(PaginateResponse.class);
     }
 
+    @DisplayName("Deposit Service Test")
+    @Test
+    void deposit() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(RoleType.BUYER.getRole()));
+        org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User("timadeshola", "password", true, true, true, true, authorities);
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), authorities);
+        SecurityContextHolder.getContext().setAuthentication(token);
+        BigDecimal resp = userService.deposit(BigDecimal.valueOf(10));
+        assertNotNull(resp);
+        assertThat(resp).isExactlyInstanceOf(BigDecimal.class);
+    }
+
+    @DisplayName("Reset Deposit Account Service Test")
+    @Test
+    void resetDeposit() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(RoleType.BUYER.getRole()));
+        org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User("timadeshola", "password", true, true, true, true, authorities);
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), authorities);
+        SecurityContextHolder.getContext().setAuthentication(token);
+        BigDecimal resp = userService.resetDeposit();
+        assertNotNull(resp);
+        assertThat(resp).isEqualTo(BigDecimal.valueOf(0));
+        assertThat(resp).isExactlyInstanceOf(BigDecimal.class);
+    }
+
+
     User createUser() {
 
         return userRepository.save(User.builder()
                 .username("timadeshola")
                 .password("password@123")
                 .deposit(BigDecimal.valueOf(10))
-                .role(RoleType.BUYER)
+                .role(RoleType.BUYER.getRole())
                 .build());
     }
-
 
 }

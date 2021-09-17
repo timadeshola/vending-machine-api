@@ -1,9 +1,6 @@
 package com.timadeshola.vendingmachine.persistence.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -29,7 +26,8 @@ public class Product extends BaseEntity {
     private String name;
 
     @Column(name = "amount_available", length = 19)
-    private BigDecimal amountAvailable;
+    @Builder.Default
+    private BigDecimal amountAvailable = BigDecimal.valueOf(0);
 
     @Column(name = "cost", length = 19)
     private BigDecimal cost;

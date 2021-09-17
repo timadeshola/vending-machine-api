@@ -44,7 +44,7 @@ class UserRepositoryTest {
                 .username("timadeshola")
                 .password("password@123")
                 .deposit(BigDecimal.valueOf(10))
-                .role(RoleType.BUYER)
+                .role(RoleType.BUYER.getRole())
                 .build());
 
         User fetchUser = userRepository.findByUsername(this.user.getUsername()).orElse(null);

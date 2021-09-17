@@ -4,7 +4,6 @@ import com.timadeshola.vendingmachine.model.enums.RoleType;
 import lombok.*;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * Project title: vending-machine
@@ -23,6 +22,5 @@ public class UserRequest implements Serializable {
 
     private String username;
     private String password;
-    private BigDecimal deposit;
     private RoleType role;
 }

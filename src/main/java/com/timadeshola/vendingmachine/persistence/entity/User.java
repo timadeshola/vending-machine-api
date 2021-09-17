@@ -2,10 +2,7 @@ package com.timadeshola.vendingmachine.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.timadeshola.vendingmachine.model.enums.RoleType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -35,10 +32,10 @@ public class User extends BaseEntity {
     private String password;
 
     @Column(name = "deposit", length = 19)
-    private BigDecimal deposit;
+    @Builder.Default
+    private BigDecimal deposit = BigDecimal.valueOf(5);
 
     @Column(name = "role", length = 10)
-    @Enumerated(EnumType.STRING)
-    private RoleType role;
+    private String role;
 
 }

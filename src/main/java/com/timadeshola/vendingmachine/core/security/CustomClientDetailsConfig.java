@@ -1,5 +1,6 @@
 package com.timadeshola.vendingmachine.core.security;
 
+import com.timadeshola.vendingmachine.core.Translator;
 import com.timadeshola.vendingmachine.persistence.entity.CustomClientDetails;
 import com.timadeshola.vendingmachine.persistence.repository.CustomClientDetailRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +27,14 @@ import java.util.stream.Collectors;
 public class CustomClientDetailsConfig implements ClientDetailsService {
 
     private final CustomClientDetailRepository customClientDetailRepository;
+    private final Translator translator;
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
         if (!clientId.isEmpty()) {
             CustomClientDetails client = customClientDetailRepository.findByClientId(clientId).<BadCredentialsException>orElseThrow(() -> {
-                throw new BadCredentialsException("client information cannot be found");
+                throw new BadCredentialsException(translator.toLocale("client.info.not.found"));
             });
 
             String resourceIds = String.join(",", client.getResourceIds());
@@ -48,9 +50,8 @@ public class CustomClientDetailsConfig implements ClientDetailsService {
             clientDetails.setRefreshTokenValiditySeconds(client.getRefreshTokenValiditySeconds());
             clientDetails.setRegisteredRedirectUri(Collections.singleton(client.getWebServerRedirectUri()));
             return clientDetails;
-
         } else {
-            throw new BadCredentialsException("Client ID cannot be empty");
+            throw new BadCredentialsException(translator.toLocale("client.not.setup"));
         }
     }
 }

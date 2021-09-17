@@ -1,5 +1,6 @@
 package com.timadeshola.vendingmachine.service.impl;
 
+import com.timadeshola.vendingmachine.core.Translator;
 import com.timadeshola.vendingmachine.core.exceptions.CustomException;
 import com.timadeshola.vendingmachine.core.utils.AppUtil;
 import com.timadeshola.vendingmachine.core.utils.ModelMapperUtil;
@@ -47,48 +48,64 @@ public class ProductServiceImpl implements ProductService {
     private final EntityManager entityManager;
     private final ApplicationDao applicationDao;
     private final AuthenticationFacadeService facadeService;
+    private final Translator translator;
 
     @Override
     public ProductResponse createProduct(ProductRequest request) {
-        productRepository.findByNameAndSeller_Id(request.getName(), request.getSeller()).ifPresent(product -> {
-            throw new CustomException(String.format("Product with name: %s already exist", request.getName()), HttpStatus.CONFLICT);
+        User user = userRepository.findByUsername(facadeService.getPrincipal()).orElseThrow(() -> {
+            throw new CustomException(translator.toLocale("user.not.found"));
         });
-        return ModelMapperUtil.map(productRepository.save(Product.builder()
-                .name(request.getName())
-                .amountAvailable(request.getAmountAvailable())
-                .cost(request.getCost())
-                .seller(userRepository.findById(request.getSeller()).orElseThrow(() -> new CustomException("User info cannot be found", HttpStatus.NOT_FOUND)))
-                .build()), ProductResponse.class);
+        if (user.getRole().equals(RoleType.SELLER.getRole())) {
+            productRepository.findByNameAndSeller_Id(request.getName(), user.getId()).ifPresent(product -> {
+                throw new CustomException(translator.toLocale("product.already.exist", request.getName()), HttpStatus.CONFLICT);
+            });
+            return ModelMapperUtil.map(productRepository.save(Product.builder()
+                    .name(request.getName())
+                    .cost(request.getCost())
+                    .seller(user)
+                    .build()), ProductResponse.class);
+        }
+        throw new CustomException(translator.toLocale("product.access.denied"), HttpStatus.FORBIDDEN);
     }
 
     @Override
     public ProductResponse updateProduct(ProductRequest request, Long id) {
-        Product product = productRepository.findByIdAndSeller_Id(id, request.getSeller()).orElseThrow(() -> {
-            throw new CustomException("Product details cannot be found", HttpStatus.CONFLICT);
+        User user = userRepository.findByUsername(facadeService.getPrincipal()).orElseThrow(() -> {
+            throw new CustomException(translator.toLocale("user.not.found"));
         });
-        if (request.getName() != null) {
-            product.setName(request.getName());
+        if (user.getRole().equals(RoleType.SELLER.getRole())) {
+            Product product = productRepository.findByIdAndSeller_Id(id, user.getId()).orElseThrow(() -> {
+                throw new CustomException(translator.toLocale("product.not.found"), HttpStatus.CONFLICT);
+            });
+            if (request.getName() != null) {
+                product.setName(request.getName());
+            }
+            if (request.getCost() != null) {
+                product.setCost(request.getCost());
+            }
+            return ModelMapperUtil.map(productRepository.save(product), ProductResponse.class);
         }
-        if (request.getAmountAvailable() != null) {
-            product.setAmountAvailable(request.getAmountAvailable());
-        }
-        if (request.getCost() != null) {
-            product.setCost(request.getCost());
-        }
-        return ModelMapperUtil.map(productRepository.save(product), ProductResponse.class);
+        throw new CustomException(translator.toLocale("product.access.denied"), HttpStatus.FORBIDDEN);
     }
 
     @Override
     public Boolean deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new CustomException("Product cannot be found", HttpStatus.NOT_FOUND));
-        productRepository.delete(product);
-        return true;
+        if (facadeService.getAuthorities().contains(RoleType.SELLER.getRole())) {
+            Product product = productRepository.findById(id).orElseThrow(() -> {
+                throw new CustomException(translator.toLocale("product.not.found"), HttpStatus.NOT_FOUND);
+            });
+            if (facadeService.getPrincipal().equals(product.getSeller().getUsername())) {
+                productRepository.delete(product);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public ProductResponse fetchProduct(Long id) {
         return ModelMapperUtil.map(productRepository.findById(id).<CustomException>orElseThrow(() -> {
-            throw new CustomException("Product cannot be found", HttpStatus.NOT_FOUND);
+            throw new CustomException(translator.toLocale("product.not.found"), HttpStatus.NOT_FOUND);
         }), ProductResponse.class);
     }
 
@@ -137,17 +154,22 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductPurchaseResponse purchaseProduct(Long productId) {
-        User user = userRepository.findByUsername(facadeService.getPrincipal()).orElseThrow(() -> new CustomException("User login details cannot be found", HttpStatus.NOT_FOUND));
-        if (user.getRole().getRole().equals(RoleType.BUYER.getRole())) {
-            Product product = productRepository.findById(productId).orElseThrow(() -> new CustomException("Product selected no longer exist", HttpStatus.NOT_FOUND));
-            BigDecimal accountBalance = user.getDeposit().subtract(product.getCost());
-            user.setDeposit(accountBalance);
-            return ProductPurchaseResponse.builder()
-                    .product(product.getName())
-                    .balance(accountBalance)
-                    .totalExpense(product.getCost())
-                    .build();
+        User user = userRepository.findByUsername(facadeService.getPrincipal()).orElseThrow(() -> new CustomException(translator.toLocale("user.login.not.found"), HttpStatus.NOT_FOUND));
+        if (user.getRole().equals(RoleType.BUYER.getRole())) {
+            Product product = productRepository.findById(productId).orElseThrow(() -> new CustomException(translator.toLocale("product.no.longer.exist"), HttpStatus.NOT_FOUND));
+            if (product.getCost().compareTo(user.getDeposit()) < 0) {
+                BigDecimal accountBalance = user.getDeposit().subtract(product.getCost());
+                user.setDeposit(accountBalance);
+                product.setAmountAvailable(product.getAmountAvailable().add(product.getCost()));
+                return ProductPurchaseResponse.builder()
+                        .product(product.getName())
+                        .balance(accountBalance)
+                        .totalExpense(product.getCost())
+                        .build();
+            } else {
+                throw new CustomException(translator.toLocale("insufficient.balance"), HttpStatus.EXPECTATION_FAILED);
+            }
         }
-        throw new CustomException("You are not a buyer", HttpStatus.PRECONDITION_FAILED);
+        throw new CustomException(translator.toLocale("user.not.buyer"), HttpStatus.PRECONDITION_FAILED);
     }
 }

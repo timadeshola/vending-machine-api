@@ -32,7 +32,7 @@ public class ProductResource {
     private final ProductService productService;
 
     @PostMapping
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAuthority('SELLER')")
     public ResponseEntity<AppResponse<ProductResponse>> createProduct(@RequestBody @Valid ProductRequest request) {
         ProductResponse response = productService.createProduct(request);
         return ResponseEntity.ok().body(AppResponse.<ProductResponse>builder()
@@ -43,7 +43,7 @@ public class ProductResource {
     }
 
     @PutMapping
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAuthority('SELLER')")
     public ResponseEntity<AppResponse<ProductResponse>> updateProduct(@RequestBody @Valid ProductRequest request, @RequestParam Long id) {
         ProductResponse response = productService.updateProduct(request, id);
         return ResponseEntity.ok().body(AppResponse.<ProductResponse>builder()
@@ -55,7 +55,7 @@ public class ProductResource {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAuthority('SELLER')")
     public ResponseEntity<AppResponse<Boolean>> deleteProduct(@RequestParam Long id) {
         Boolean response = productService.deleteProduct(id);
         return ResponseEntity.ok().body(AppResponse.<Boolean>builder()
@@ -93,7 +93,7 @@ public class ProductResource {
     }
 
     @PostMapping("purchaseProduct/{id:[\\d]}")
-    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
+    @PreAuthorize("hasAuthority('BUYER')")
     public ResponseEntity<AppResponse<ProductPurchaseResponse>> purchaseProduct(@PathVariable Long id) {
         ProductPurchaseResponse response = productService.purchaseProduct(id);
         return ResponseEntity.ok().body(AppResponse.<ProductPurchaseResponse>builder()

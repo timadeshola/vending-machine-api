@@ -1,5 +1,6 @@
 package com.timadeshola.vendingmachine.core.security;
 
+import com.timadeshola.vendingmachine.core.Translator;
 import com.timadeshola.vendingmachine.persistence.entity.User;
 import com.timadeshola.vendingmachine.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +29,18 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final Translator translator;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         User user = userRepository.findByUsername(username).<BadCredentialsException>orElseThrow(() -> {
-            throw new BadCredentialsException("Invalid username or password");
+            throw new BadCredentialsException(translator.toLocale("invalid.user.password"));
         });
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole().getRole()));
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
 
         user = userRepository.save(user);
 

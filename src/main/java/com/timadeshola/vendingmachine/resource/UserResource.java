@@ -86,7 +86,7 @@ public class UserResource {
                                                                                   @RequestParam(required = false) String startDate,
                                                                                   @RequestParam(required = false) String endDate,
                                                                                   @RequestParam(required = false) String username,
-                                                                                  @RequestParam(required = false) RoleType role) {
+                                                                                  @RequestParam(required = false) String role) {
         PaginateResponse<UserResponse> response = userService.fetchUser(start, limit, startDate, endDate, username, role);
         return ResponseEntity.ok().body(AppResponse.<PaginateResponse<UserResponse>>builder()
                 .message(AppConstant.RestMessage.success)
@@ -97,7 +97,7 @@ public class UserResource {
     }
 
     @PostMapping("deposit")
-    @PreAuthorize("hasAnyRole('BUYER')")
+    @PreAuthorize("hasAuthority('BUYER')")
     public ResponseEntity<AppResponse<BigDecimal>> purchaseProduct(@RequestParam BigDecimal amount) {
         BigDecimal response = userService.deposit(amount);
         return ResponseEntity.ok().body(AppResponse.<BigDecimal>builder()
@@ -108,7 +108,7 @@ public class UserResource {
     }
 
     @PostMapping("reset")
-    @PreAuthorize("hasAnyRole('BUYER')")
+    @PreAuthorize("hasAuthority('BUYER')")
     public ResponseEntity<AppResponse<BigDecimal>> resetDeposit() {
         BigDecimal response = userService.resetDeposit();
         return ResponseEntity.ok().body(AppResponse.<BigDecimal>builder()

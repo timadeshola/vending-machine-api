@@ -35,7 +35,6 @@ class UserResponseTest {
         user = UserResponse.builder()
                 .id(1L)
                 .username("timadeshola")
-                .password("password@123")
                 .deposit(BigDecimal.valueOf(10))
                 .role(RoleType.BUYER)
                 .createdBy("sam.wise")
@@ -44,7 +43,6 @@ class UserResponseTest {
 
         assertNotNull(user);
         assertThat(user.getUsername()).isEqualTo("timadeshola");
-        assertThat(user.getPassword()).isNotEmpty();
         assertEquals(1L, user.getId());
         assertThat(user).isExactlyInstanceOf(UserResponse.class);
         assertThat(user.getRole()).isExactlyInstanceOf(RoleType.class);

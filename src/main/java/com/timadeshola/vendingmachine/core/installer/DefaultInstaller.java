@@ -59,7 +59,7 @@ public class DefaultInstaller implements ApplicationListener<ContextRefreshedEve
         User user = User.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
-                .role(role)
+                .role(role.getRole())
                 .createdBy("system")
                 .dateCreated(new Timestamp(System.currentTimeMillis()))
                 .build();

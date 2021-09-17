@@ -23,7 +23,6 @@ public class UserResponse implements Serializable {
 
     private Long id;
     private String username;
-    private String password;
     private BigDecimal deposit;
     private RoleType role;
     private String dateCreated;

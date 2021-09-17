@@ -21,7 +21,5 @@ import java.math.BigDecimal;
 public class ProductRequest implements Serializable {
 
     private String name;
-    private BigDecimal amountAvailable;
     private BigDecimal cost;
-    private Long seller;
 }

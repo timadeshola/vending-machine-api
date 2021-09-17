@@ -37,7 +37,6 @@ class ProductResponseTest {
                 .seller(UserResponse.builder()
                         .id(1L)
                         .username("timadeshola")
-                        .password("password@123")
                         .deposit(BigDecimal.valueOf(10))
                         .role(RoleType.SELLER)
                         .createdBy("sam.wise")

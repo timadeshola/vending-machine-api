@@ -55,9 +55,7 @@ class ProductServiceTest {
         User user = createUser();
         request = ProductRequest.builder()
                 .name("Jave Expert")
-                .amountAvailable(BigDecimal.valueOf(20))
                 .cost(BigDecimal.valueOf(20))
-                .seller(user.getId())
                 .build();
 
         product = productService.createProduct(request);
@@ -65,7 +63,6 @@ class ProductServiceTest {
         assertNotNull(user);
         assertNotNull(product);
         assertThat(product.getSeller().getUsername()).isEqualTo(user.getUsername());
-        assertThat(product.getAmountAvailable()).isEqualTo(BigDecimal.valueOf(20));
         assertThat(product).isExactlyInstanceOf(ProductResponse.class);
         assertThat(product.getSeller()).isExactlyInstanceOf(UserResponse.class);
     }
@@ -76,9 +73,7 @@ class ProductServiceTest {
         Product existingProduct = createProduct();
         request = ProductRequest.builder()
                 .name("Java Expert Info")
-                .amountAvailable(BigDecimal.valueOf(20))
                 .cost(BigDecimal.valueOf(20))
-                .seller(existingProduct.getSeller().getId())
                 .build();
         this.product = productService.updateProduct(request, existingProduct.getId());
 
@@ -87,7 +82,6 @@ class ProductServiceTest {
         assertNotNull(product);
         assertThat(request.getName()).isEqualTo(product.getName());
         assertThat(product.getSeller().getUsername()).isEqualTo(existingProduct.getSeller().getUsername());
-        assertThat(product.getAmountAvailable()).isEqualTo(BigDecimal.valueOf(20));
         assertThat(product).isExactlyInstanceOf(ProductResponse.class);
         assertThat(product.getSeller()).isExactlyInstanceOf(UserResponse.class);
     }
@@ -135,7 +129,7 @@ class ProductServiceTest {
                 .username("timadeshola")
                 .password("password@123")
                 .deposit(BigDecimal.valueOf(10))
-                .role(RoleType.BUYER)
+                .role(RoleType.BUYER.getRole())
                 .build());
     }
 
@@ -145,7 +139,7 @@ class ProductServiceTest {
                 .username("timadeshola")
                 .password("password@123")
                 .deposit(BigDecimal.valueOf(10))
-                .role(RoleType.BUYER)
+                .role(RoleType.BUYER.getRole())
                 .build());
 
         Product product = Product.builder()
