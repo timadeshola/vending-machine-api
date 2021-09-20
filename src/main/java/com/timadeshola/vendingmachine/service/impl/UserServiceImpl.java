@@ -149,6 +149,7 @@ public class UserServiceImpl implements UserService {
         if (user.getRole().equals(RoleType.BUYER.getRole())) {
             if (verifyAmount(amount)) {
                 user.setDeposit(user.getDeposit().add(amount));
+                userRepository.save(user);
                 return user.getDeposit();
             } else {
                 throw new CustomException(translator.toLocale("deposit.error"), HttpStatus.PRECONDITION_FAILED);

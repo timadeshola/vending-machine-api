@@ -92,7 +92,7 @@ public class ProductResource {
 
     }
 
-    @PostMapping("purchaseProduct/{id:[\\d]}")
+    @PostMapping("buy/{id:[\\d]}")
     @PreAuthorize("hasAuthority('BUYER')")
     public ResponseEntity<AppResponse<ProductPurchaseResponse>> purchaseProduct(@PathVariable Long id) {
         ProductPurchaseResponse response = productService.purchaseProduct(id);

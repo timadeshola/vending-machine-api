@@ -1,6 +1,5 @@
 package com.timadeshola.vendingmachine.service;
 
-import com.timadeshola.vendingmachine.model.enums.RoleType;
 import com.timadeshola.vendingmachine.model.request.UserRequest;
 import com.timadeshola.vendingmachine.model.response.PaginateResponse;
 import com.timadeshola.vendingmachine.model.response.UserResponse;

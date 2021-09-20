@@ -99,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
                 return true;
             }
         }
-        return false;
+        throw new CustomException(translator.toLocale("product.delete.error"), HttpStatus.FORBIDDEN);
     }
 
     @Override
@@ -161,9 +161,11 @@ public class ProductServiceImpl implements ProductService {
                 BigDecimal accountBalance = user.getDeposit().subtract(product.getCost());
                 user.setDeposit(accountBalance);
                 product.setAmountAvailable(product.getAmountAvailable().add(product.getCost()));
+                userRepository.save(user);
+                productRepository.save(product);
                 return ProductPurchaseResponse.builder()
                         .product(product.getName())
-                        .balance(accountBalance)
+                        .change(AppUtil.resetAmount(accountBalance.intValue()))
                         .totalExpense(product.getCost())
                         .build();
             } else {

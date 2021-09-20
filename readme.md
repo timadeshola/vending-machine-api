@@ -2,10 +2,11 @@ Vending Machine API.
 
 Background:
 
-This application is to enable buyer and seller perform basic processes on the system i.e. buying and selling of 
-items of the system and making payment and also depositing money into account via the vending machine.
+This application is to enable buyer and seller perform basic processes on the system i.e. buying and selling of items of
+the system and making payment and also depositing money into account via the vending machine.
 
 Technology Stack:
+
 - Java
 - Spring Boot
 - Spring security (Oauth2)
@@ -22,4 +23,5 @@ UML Diagram
 ![](src/main/resources/uml.png)
 
 Swagger UI URL
--   http://localhost:9090/swagger-ui/index.html
+
+- http://localhost:9090/swagger-ui/index.html

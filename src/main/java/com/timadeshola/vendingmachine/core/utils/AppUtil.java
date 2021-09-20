@@ -124,7 +124,24 @@ public class AppUtil {
         return false;
     }
 
+    public static int resetAmount(int amount) {
+        int[] values = new int[]{5, 10, 20, 50, 100};
+        int result = 0;
+        int idx = 0;
+        int distance = Math.abs(values[0] - amount);
+        for (int i = 1; i < values.length; i++) {
+            int cdistance = Math.abs(values[i] - amount);
+            if (cdistance < distance) {
+                idx = i;
+                distance = cdistance;
+            }
+            result = values[idx];
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
-        System.out.println(verifyAmount(BigDecimal.valueOf(10)));
+//        System.out.println(verifyAmount(BigDecimal.valueOf(10)));
+        System.out.println("xx: " + resetAmount(60));
     }
 }

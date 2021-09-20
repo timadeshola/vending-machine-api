@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class UserRequest implements Serializable {
 
     @NotBlank(message = "Username cannot be empty")
-    @Size(message = "Username cannot be less than 8 and greater than 60 characters", min = 8, max = 60)
+    @Size(message = "Username cannot be less than 3 and greater than 60 characters", min = 3, max = 60)
     private String username;
     @NotBlank(message = "Password cannot be blank")
     private String password;

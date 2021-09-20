@@ -1,11 +1,12 @@
 package com.timadeshola.vendingmachine.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.timadeshola.vendingmachine.model.enums.RoleType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
 /**
@@ -33,7 +34,7 @@ public class User extends BaseEntity {
 
     @Column(name = "deposit", length = 19)
     @Builder.Default
-    private BigDecimal deposit = BigDecimal.valueOf(5);
+    private BigDecimal deposit = BigDecimal.valueOf(0.0);
 
     @Column(name = "role", length = 10)
     private String role;

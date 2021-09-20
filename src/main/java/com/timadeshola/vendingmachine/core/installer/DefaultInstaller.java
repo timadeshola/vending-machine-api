@@ -30,7 +30,6 @@ import java.util.Optional;
 public class DefaultInstaller implements ApplicationListener<ContextRefreshedEvent> {
 
     private final UserRepository userRepository;
-    ;
     private final CustomClientDetailRepository clientDetailRepository;
     private final PasswordEncoder passwordEncoder;
     private boolean alreadySetup = false;
@@ -44,8 +43,8 @@ public class DefaultInstaller implements ApplicationListener<ContextRefreshedEve
             return;
         }
 
-        createUserIfNotExist("password", "timadeshola", RoleType.BUYER);
-        createUserIfNotExist("password", "ennyadeshola", RoleType.SELLER);
+//        createUserIfNotExist("password", "timadeshola", RoleType.BUYER);
+//        createUserIfNotExist("password", "ennyadeshola", RoleType.SELLER);
         createCustomClientDetailsIfNotExist(appName);
 
         alreadySetup = true;

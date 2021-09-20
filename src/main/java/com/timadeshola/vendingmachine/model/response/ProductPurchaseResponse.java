@@ -22,5 +22,5 @@ public class ProductPurchaseResponse implements Serializable {
 
     private BigDecimal totalExpense;
     private String product;
-    private BigDecimal balance;
+    private Integer change;
 }
